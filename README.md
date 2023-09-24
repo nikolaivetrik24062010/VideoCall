@@ -17,3 +17,4 @@ Error Handling: The code snippet demonstrates robust error handling, ensuring th
 UI Customization: The app's UI is customized using Jetpack Compose modifiers and themes to create a visually appealing and user-friendly interface.
 
 This repository serves as a starting point for building your own video chat application using the StreamVideo SDK and modern Android development practices. Contributions, bug fixes, and feature enhancements are welcomed through pull requests. 
+![Screenshot_1695582846](https://github.com/nikolaivetrik24062010/VideoCall/assets/98304653/86ad9b7f-86ab-4e28-a474-358ec871efc3)
