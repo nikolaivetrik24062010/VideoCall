@@ -1,3 +1,6 @@
+![20230924_125319](https://github.com/nikolaivetrik24062010/VideoCall/assets/98304653/a9d16702-0cd0-4026-ab3e-d1c4bc4157a5)
+
+
 # VideoCall
 This GitHub repository showcases an Android video chat application built using the StreamVideo SDK. The application offers a seamless video calling experience, complete with camera control, microphone control, and a user-friendly interface created with Jetpack Compose.
 Key Technologies and Principles Demonstrated:
