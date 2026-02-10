@@ -1,22 +1,98 @@
-![20230924_125319](https://github.com/nikolaivetrik24062010/VideoCall/assets/98304653/a9d16702-0cd0-4026-ab3e-d1c4bc4157a5)
+# VideoCall – Android Application Security Research Project
 
+Android video calling application built using the **StreamVideo SDK**, created primarily as an **Application Security learning and analysis project**.  
+The goal of this project is to understand how real-time communication apps work internally, what their **attack surface looks like**, and how to **secure video, audio, and signaling flows** in production environments.
 
-# VideoCall
-This GitHub repository showcases an Android video chat application built using the StreamVideo SDK. The application offers a seamless video calling experience, complete with camera control, microphone control, and a user-friendly interface created with Jetpack Compose.
-Key Technologies and Principles Demonstrated:
+---
 
-StreamVideo SDK: The project effectively utilizes the StreamVideo SDK for video communication, leveraging its features for real-time chat functionality.
+## 🎯 Security Research Goals
 
-Jetpack Compose: The app's user interface is constructed using Jetpack Compose, Google's modern Android UI toolkit, which simplifies UI development and enhances the app's overall user experience.
+- Analyze real-time video communication flows
+- Understand trust boundaries in RTC (Real-Time Communication) apps
+- Study SDK-based abstractions from a security perspective
+- Identify common weaknesses in video calling applications
+- Learn how to design safer media and signaling layers
 
-Coroutines: Kotlin Coroutines are employed to manage asynchronous tasks, ensuring smooth interactions within the app.
+---
 
-Android Lifecycle: The Android Lifecycle components are used to manage the app's UI components and handle their lifecycle events efficiently.
+## 🔍 Attack Surface Explored
 
-Dependency Injection: While not explicitly shown in this snippet, for a production-ready app, you would typically employ a dependency injection framework like Dagger or Hilt for better code organization and maintainability.
+- Camera and microphone access control
+- SDK token usage and lifecycle
+- Client-side permission enforcement
+- Signaling channel trust assumptions
+- UI-triggered state changes (mute, camera on/off)
+- Error handling and information disclosure
+- Lifecycle misuse leading to resource leaks
 
-Error Handling: The code snippet demonstrates robust error handling, ensuring that any issues during the video call setup are properly managed and user-friendly error messages are displayed.
+---
 
-UI Customization: The app's UI is customized using Jetpack Compose modifiers and themes to create a visually appealing and user-friendly interface.
+## 🧠 Technologies Analyzed
 
-This repository serves as a starting point for building your own video chat application using the StreamVideo SDK and modern Android development practices. Contributions, bug fixes, and feature enhancements are welcomed through pull requests. 
+- **StreamVideo SDK**
+  - Real-time audio/video streaming
+  - Client-side SDK security assumptions
+- **Jetpack Compose**
+  - UI-driven state transitions
+  - Interaction-triggered privilege usage
+- **Kotlin Coroutines**
+  - Async execution and race condition analysis
+- **Android Lifecycle**
+  - Resource cleanup and state desynchronization risks
+
+---
+
+## 🛡️ Security Perspective
+
+This project helps understand:
+
+- Why media permissions are a critical attack vector
+- How SDK misuse can lead to:
+  - Unauthorized media access
+  - Session hijacking
+  - State desynchronization
+- The importance of:
+  - Server-side authorization
+  - Short-lived tokens
+  - Explicit permission handling
+- Why UI state ≠ actual security state
+
+---
+
+## 🧪 Defensive Takeaways
+
+- Do not trust client-side mute/camera flags
+- Validate session state server-side
+- Properly scope SDK tokens
+- Handle lifecycle events defensively
+- Minimize information leakage in error messages
+
+---
+
+## 📱 Functionality (for Analysis)
+
+- Video calling
+- Camera on/off control
+- Microphone mute/unmute
+- Compose-based UI
+- Graceful error handling
+
+---
+
+## 📸 Demo
+
+![VideoCall Demo](https://github.com/nikolaivetrik24062010/VideoCall/assets/98304653/a9d16702-0cd0-4026-ab3e-d1c4bc4157a5)
+
+---
+
+## 👤 Author
+
+**Nikolay Vetrik**  
+Application Security / Mobile Security Engineer
+
+---
+
+## ⚠️ Disclaimer
+
+This project is intended **strictly for educational, defensive application security research and hiring evaluation purposes**.  
+No malicious use is encouraged or supported.
