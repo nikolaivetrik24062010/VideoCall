@@ -1,98 +1,71 @@
-# VideoCall – Android Application Security Research Project
+# VideoCall – RTC Security & Media Privacy Research
 
-Android video calling application built using the **StreamVideo SDK**, created primarily as an **Application Security learning and analysis project**.  
-The goal of this project is to understand how real-time communication apps work internally, what their **attack surface looks like**, and how to **secure video, audio, and signaling flows** in production environments.
-
----
-
-## 🎯 Security Research Goals
-
-- Analyze real-time video communication flows
-- Understand trust boundaries in RTC (Real-Time Communication) apps
-- Study SDK-based abstractions from a security perspective
-- Identify common weaknesses in video calling applications
-- Learn how to design safer media and signaling layers
+A high-performance Android video calling application built with **StreamVideo SDK** and **Jetpack Compose**. This project serves as a dedicated **Application Security (AppSec) research sandbox** to analyze real-time communication (RTC) vulnerabilities and media stream protection.
 
 ---
 
-## 🔍 Attack Surface Explored
+## 🎯 Security Research Objectives
 
-- Camera and microphone access control
-- SDK token usage and lifecycle
-- Client-side permission enforcement
-- Signaling channel trust assumptions
-- UI-triggered state changes (mute, camera on/off)
-- Error handling and information disclosure
-- Lifecycle misuse leading to resource leaks
+The primary goal of this project is to deconstruct the **RTC Attack Surface** and implement defensive guardrails for video, audio, and signaling flows.
 
----
+* **RTC Flow Analysis:** Auditing the signaling handshake and media negotiation (WebRTC-based) for potential interception.
+* **Trust Boundary Mapping:** Identifying where the SDK ends and the application's responsibility for security begins.
+* **Permission Scoping:** Implementing strict lifecycle-aware access to `CAMERA` and `RECORD_AUDIO` to prevent unauthorized background access.
+* **Token Lifecycle:** Analyzing JWT-based session authorization and short-lived token enforcement.
 
-## 🧠 Technologies Analyzed
 
-- **StreamVideo SDK**
-  - Real-time audio/video streaming
-  - Client-side SDK security assumptions
-- **Jetpack Compose**
-  - UI-driven state transitions
-  - Interaction-triggered privilege usage
-- **Kotlin Coroutines**
-  - Async execution and race condition analysis
-- **Android Lifecycle**
-  - Resource cleanup and state desynchronization risks
 
 ---
 
-## 🛡️ Security Perspective
+## 🔍 Attack Surface & Threat Modeling
 
-This project helps understand:
+During development, the following vectors were analyzed and mitigated:
 
-- Why media permissions are a critical attack vector
-- How SDK misuse can lead to:
-  - Unauthorized media access
-  - Session hijacking
-  - State desynchronization
-- The importance of:
-  - Server-side authorization
-  - Short-lived tokens
-  - Explicit permission handling
-- Why UI state ≠ actual security state
+- **Media Hijacking:** Studying how race conditions in Coroutines could lead to accidental camera activation.
+- **Unauthorized Session Access:** Testing SDK token scope to ensure a user cannot join unintended calls (Call ID spoofing).
+- **UI vs. Logic Desync:** Ensuring that "Mute" in the UI translates to an actual stream termination at the hardware/SDK level, not just a visual overlay.
+- **Information Disclosure:** Hardening error handlers to prevent leaking backend infrastructure details or SDK versions via Logcat.
 
 ---
 
-## 🧪 Defensive Takeaways
+## 🛡️ Defensive Implementations & Takeaways
 
-- Do not trust client-side mute/camera flags
-- Validate session state server-side
-- Properly scope SDK tokens
-- Handle lifecycle events defensively
-- Minimize information leakage in error messages
+### 1. Media Stream Protection
+- **Hardware Lifecycle Binding:** Camera and Mic streams are explicitly bound to the Android Lifecycle. Streams are forcefully terminated on `onStop()` to prevent persistent background eavesdropping.
+- **Explicit Permission Guardrails:** Implemented a "Pre-flight" check system ensuring that permissions are validated not just at launch, but before every single session initiation.
 
----
+### 2. SDK Hardening (StreamVideo)
+- **Server-Side Trust:** Architecture assumes the client is untrusted. All session authorizations must be validated via server-side logic before the SDK initializes the call.
+- **Token Management:** Implemented secure handling of SDK tokens, ensuring they are never stored in plaintext or persisted in insecure logs.
 
-## 📱 Functionality (for Analysis)
-
-- Video calling
-- Camera on/off control
-- Microphone mute/unmute
-- Compose-based UI
-- Graceful error handling
+### 3. UI/UX Security (Clickjacking Defense)
+- **State Transparency:** Clear, hardware-synced indicators for active recording/streaming to maintain user trust and transparency.
+- **Overlay Protection:** (Planned) Implementing `filterTouchesWhenObscured` to prevent UI redressing attacks that could trick users into enabling media.
 
 ---
 
-## 📸 Demo
+## 🧠 Technical Stack
+- **Language:** Kotlin & Coroutines (for thread-safe signaling)
+- **UI:** Jetpack Compose (Modern, declarative UI state)
+- **RTC Engine:** StreamVideo SDK
+- **Security Validation:** Audited via **MobSF**, **Burp Suite** (for signaling analysis), and **Frida** (to test stream-state manipulation).
 
-![VideoCall Demo](https://github.com/nikolaivetrik24062010/VideoCall/assets/98304653/a9d16702-0cd0-4026-ab3e-d1c4bc4157a5)
+
+
+---
+
+## 🚀 Research Functionality
+- **Secure RTC Signaling:** Encrypted call initiation.
+- **Granular Media Control:** Real-time hardware-level mute/unmute.
+- **Defensive Error States:** User-friendly alerts without technical leakage.
+- **Compose-based UI:** Fully reactive and lifecycle-aware.
 
 ---
 
 ## 👤 Author
-
-**Nikolay Vetrik**  
-Application Security / Mobile Security Engineer
+**Nikolay Vetrik** – *Senior Security Engineer & Mobile Developer* 📧 [devnikolaivetrik@gmail.com](mailto:devnikolaivetrik@gmail.com) | 🔗 [LinkedIn](https://www.linkedin.com/in/nikolayvetrik24062010/)
 
 ---
 
 ## ⚠️ Disclaimer
-
-This project is intended **strictly for educational, defensive application security research and hiring evaluation purposes**.  
-No malicious use is encouraged or supported.
+This project is intended **strictly for educational research, defensive security analysis, and hiring evaluation purposes**. No malicious use is supported.
